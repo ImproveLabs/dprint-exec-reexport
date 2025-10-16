@@ -37,13 +37,14 @@ const moduleType =
     ?.replace("--module=", "") ?? "module";
 
 const monorepoDirpath = getMonorepoDirpath(filepath);
+const dirpath = path.dirname(filepath);
 let newFileLines = [];
 if (moduleType === "module") {
   newFileLines.push(
     ...fileLines.slice(0, dprintReexportLineIndex),
     dprintReexportLine
   );
-  const matchedFiles = fs.globSync(path.resolve(filepath, globPattern));
+  const matchedFiles = fs.globSync(path.resolve(dirpath, globPattern));
   if (globfileType === "filepaths") {
     newFileLines.push("export default {");
   }
@@ -51,13 +52,13 @@ if (moduleType === "module") {
   for (const matchedFile of matchedFiles) {
     if (globfileType === "matches") {
       newFileLines.push(
-        `export * from ${JSON.stringify(path.relative(filepath, matchedFile))};`
+        `export * from ${JSON.stringify(path.relative(dirpath, matchedFile))};`
       );
     } else if (globfileType === "files") {
       newFileLines.push(
         `export * as ${JSON.stringify(
           path.relative(monorepoDirpath, matchedFile)
-        )} from ${JSON.stringify(path.relative(filepath, matchedFile))};`
+        )} from ${JSON.stringify(path.relative(dirpath, matchedFile))};`
       );
     } else if (globfileType === "filepaths") {
       newFileLines.push(

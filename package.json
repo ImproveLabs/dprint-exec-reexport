@@ -1,6 +1,6 @@
 {
   "name": "dprint-exec-reexport",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "bin": "./dist/dprint-exec-reexport.mjs",
   "scripts": {
     "build": "tsdown",

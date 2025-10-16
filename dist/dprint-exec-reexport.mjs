@@ -244,13 +244,14 @@ const globPattern = pluginArgs[2];
 const globfileType = pluginArgs.find((arg) => arg.startsWith("--type="))?.replace("--type=", "") ?? "matches";
 const moduleType = pluginArgs.find((arg) => arg.startsWith("--module="))?.replace("--module=", "") ?? "module";
 const monorepoDirpath = getMonorepoDirpath(filepath);
+const dirpath = path.dirname(filepath);
 let newFileLines = [];
 if (moduleType === "module") {
 	newFileLines.push(...fileLines.slice(0, dprintReexportLineIndex), dprintReexportLine);
-	const matchedFiles = fs$1.globSync(path.resolve(monorepoDirpath, globPattern));
+	const matchedFiles = fs$1.globSync(path.resolve(dirpath, globPattern));
 	if (globfileType === "filepaths") newFileLines.push("export default {");
-	for (const matchedFile of matchedFiles) if (globfileType === "matches") newFileLines.push(`export * from ${JSON.stringify(path.relative(filepath, matchedFile))};`);
-	else if (globfileType === "files") newFileLines.push(`export * as ${JSON.stringify(path.relative(monorepoDirpath, matchedFile))} from ${JSON.stringify(path.relative(filepath, matchedFile))};`);
+	for (const matchedFile of matchedFiles) if (globfileType === "matches") newFileLines.push(`export * from ${JSON.stringify(path.relative(dirpath, matchedFile))};`);
+	else if (globfileType === "files") newFileLines.push(`export * as ${JSON.stringify(path.relative(monorepoDirpath, matchedFile))} from ${JSON.stringify(path.relative(dirpath, matchedFile))};`);
 	else if (globfileType === "filepaths") newFileLines.push(`${JSON.stringify(path.relative(monorepoDirpath, matchedFile))}: true,`);
 	if (globfileType === "filepaths") newFileLines.push("}");
 	newFileLines.push(...fileLines.slice(dprintReexportEndLineIndex));
