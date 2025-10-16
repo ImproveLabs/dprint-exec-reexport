@@ -1,10 +1,10 @@
 {
   "name": "dprint-exec-reexport",
-  "version": "0.0.2",
-  "bin": ".build/bin/dprint-exec-reexport.js",
+  "version": "0.0.5",
+  "bin": "./dist/dprint-exec-reexport.mjs",
   "scripts": {
     "build": "tsdown",
-    "prepublish": "bun run bundle"
+    "prepublish": "bun run build"
   },
   "devDependencies": {
     "tsdown": "^0.15.7",
