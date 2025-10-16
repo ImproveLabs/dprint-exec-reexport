@@ -6539,7 +6539,7 @@ function createGlobfileManager({ monorepoDirpath }) {
 				/** @param {string} filepath */
 				for (const matchedFile of matchedFiles) {
 					const filepath$1 = filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath;
-					if (moduleType$1 === "module") virtualFileContentLines.push(`export * as ${JSON.stringify(posix$1.basename(filepath$1))} from ${JSON.stringify(filepath$1)};`);
+					if (moduleType$1 === "module") virtualFileContentLines.push(`export * as ${JSON.stringify(filepath$1)} from ${JSON.stringify(filepath$1)};`);
 					else {
 						const filepath$2 = filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath;
 						virtualFileContentLines.push("module.exports = {");

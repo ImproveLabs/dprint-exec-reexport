@@ -2,34 +2,6 @@
 import path from "pathe";
 import { globSync } from "glob";
 
-/**
-	@param {{ globfileModuleSpecifier: string, importerFilepath: string }} args
-	@return {string}
-*/
-export function getAbsoluteGlobPattern({
-  globfileModuleSpecifier,
-  importerFilepath,
-}) {
-  if (globfileModuleSpecifier.startsWith("glob:")) {
-    return path.resolve(
-      path.dirname(importerFilepath),
-      globfileModuleSpecifier.replace("glob:", "")
-    );
-  } else {
-    return path.resolve(
-      path.dirname(importerFilepath),
-      globfileModuleSpecifier.replace("glob[files]:", "")
-    );
-  }
-}
-
-/**
-	@param {string} specifier
-*/
-export function isGlobSpecifier(specifier) {
-  return /^glob(?:\[[^\]]+])?:/.test(specifier);
-}
-
 export function createGlobfileManager({ monorepoDirpath }) {
   /**
 		@param {{ globfileModuleSpecifier: string, importerFilepath: string }} args
@@ -165,11 +137,10 @@ export function createGlobfileManager({ monorepoDirpath }) {
             filepathType === "relative"
               ? matchedFile.relativeFilepath
               : matchedFile.absoluteFilepath;
+
           if (moduleType === "module") {
             virtualFileContentLines.push(
-              `export * as ${JSON.stringify(
-                path.basename(filepath)
-              )} from ${JSON.stringify(filepath)};`
+              `export * as ${JSON.stringify(filepath)} from ${JSON.stringify(filepath)};`
             );
           } else {
             const filepath =
