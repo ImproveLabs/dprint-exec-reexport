@@ -132,37 +132,39 @@ export function createGlobfileManager({ monorepoDirpath }) {
 
       case "files": {
         /** @param {string} filepath */
-        for (const matchedFile of matchedFiles) {
-          const filepath =
-            filepathType === "relative"
-              ? matchedFile.relativeFilepath
-              : matchedFile.absoluteFilepath;
-
-          if (moduleType === "module") {
-            virtualFileContentLines.push(
-              `export * as ${JSON.stringify(filepath)} from ${JSON.stringify(filepath)};`
-            );
-          } else {
+        if (moduleType === "module") {
+          for (const matchedFile of matchedFiles) {
             const filepath =
               filepathType === "relative"
                 ? matchedFile.relativeFilepath
                 : matchedFile.absoluteFilepath;
 
-            virtualFileContentLines.push("module.exports = {");
-            for (const matchedFile of matchedFiles) {
-              const relativeFilePath = path.relative(
-                monorepoDirpath,
-                matchedFile.absoluteFilepath
-              );
-              virtualFileContentLines.push(
-                `${JSON.stringify(relativeFilePath)}: require(${JSON.stringify(
-                  filepath
-                )}),`
-              );
-            }
-            virtualFileContentLines.push("}");
+            virtualFileContentLines.push(
+              `export * as ${JSON.stringify(filepath)} from ${JSON.stringify(
+                filepath
+              )};`
+            );
           }
+        } else {
+          virtualFileContentLines.push("module.exports = {");
+          for (const matchedFile of matchedFiles) {
+            const filepath =
+              filepathType === "relative"
+                ? matchedFile.relativeFilepath
+                : matchedFile.absoluteFilepath;
+            const relativeFilePath = path.relative(
+              monorepoDirpath,
+              matchedFile.absoluteFilepath
+            );
+            virtualFileContentLines.push(
+              `${JSON.stringify(filepath)}: require(${JSON.stringify(
+                filepath
+              )}),`
+            );
+          }
+          virtualFileContentLines.push("}");
         }
+
         break;
       }
 
