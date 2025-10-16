@@ -51,14 +51,17 @@ if (moduleType === "module") {
 
   for (const matchedFile of matchedFiles) {
     if (globfileType === "matches") {
-      newFileLines.push(
-        `export * from ${JSON.stringify(path.relative(dirpath, matchedFile))};`
-      );
+      let importSpecifier = path.relative(dirpath, matchedFile);
+      if (!importSpecifier.startsWith(".")) {
+        importSpecifier = `./${importSpecifier}`;
+      }
+
+      newFileLines.push(`export * from ${JSON.stringify(importSpecifier)}`;);
     } else if (globfileType === "files") {
       newFileLines.push(
         `export * as ${JSON.stringify(
           path.relative(monorepoDirpath, matchedFile)
-        )} from ${JSON.stringify(path.relative(dirpath, matchedFile))};`
+        )} from ${JSON.stringify(importSpecifier)};`
       );
     } else if (globfileType === "filepaths") {
       newFileLines.push(
