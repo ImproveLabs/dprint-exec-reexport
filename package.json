@@ -1,6 +1,6 @@
 {
   "name": "dprint-exec-reexport",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "bin": "./dist/dprint-exec-reexport.mjs",
   "scripts": {
     "build": "tsdown",
@@ -9,8 +9,6 @@
   "devDependencies": {
     "tsdown": "^0.15.7",
     "get-monorepo-root": "^1.2.1",
-    "get-stdin": "^9.0.0",
-    "glob": "^11.0.3",
-    "pathe": "^2.0.3"
+    "get-stdin": "^9.0.0"
   }
 }
