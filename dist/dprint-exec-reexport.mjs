@@ -250,8 +250,11 @@ if (moduleType === "module") {
 	newFileLines.push(...fileLines.slice(0, dprintReexportLineIndex), dprintReexportLine);
 	const matchedFiles = fs$1.globSync(path.resolve(dirpath, globPattern));
 	if (globfileType === "filepaths") newFileLines.push("export default {");
-	for (const matchedFile of matchedFiles) if (globfileType === "matches") newFileLines.push(`export * from ${JSON.stringify(path.relative(dirpath, matchedFile))};`);
-	else if (globfileType === "files") newFileLines.push(`export * as ${JSON.stringify(path.relative(monorepoDirpath, matchedFile))} from ${JSON.stringify(path.relative(dirpath, matchedFile))};`);
+	for (const matchedFile of matchedFiles) if (globfileType === "matches") {
+		let importSpecifier$1 = path.relative(dirpath, matchedFile);
+		if (!importSpecifier$1.startsWith(".")) importSpecifier$1 = `./${importSpecifier$1}`;
+		newFileLines.push(`export * from ${JSON.stringify(importSpecifier$1)};`);
+	} else if (globfileType === "files") newFileLines.push(`export * as ${JSON.stringify(path.relative(monorepoDirpath, matchedFile))} from ${JSON.stringify(importSpecifier)};`);
 	else if (globfileType === "filepaths") newFileLines.push(`${JSON.stringify(path.relative(monorepoDirpath, matchedFile))}: true,`);
 	if (globfileType === "filepaths") newFileLines.push("}");
 	newFileLines.push(...fileLines.slice(dprintReexportEndLineIndex));

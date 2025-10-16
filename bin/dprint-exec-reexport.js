@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-check
 import { getMonorepoDirpath } from "get-monorepo-root";
 import getStdin from "get-stdin";
 import fs from "node:fs";
@@ -50,13 +51,13 @@ if (moduleType === "module") {
   }
 
   for (const matchedFile of matchedFiles) {
+    let importSpecifier = path.relative(dirpath, matchedFile);
     if (globfileType === "matches") {
-      let importSpecifier = path.relative(dirpath, matchedFile);
       if (!importSpecifier.startsWith(".")) {
         importSpecifier = `./${importSpecifier}`;
       }
 
-      newFileLines.push(`export * from ${JSON.stringify(importSpecifier)}`;);
+      newFileLines.push(`export * from ${JSON.stringify(importSpecifier)};`);
     } else if (globfileType === "files") {
       newFileLines.push(
         `export * as ${JSON.stringify(
