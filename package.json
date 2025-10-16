@@ -1,14 +1,16 @@
 {
   "name": "dprint-exec-reexport",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "bin": ".build/bin/dprint-exec-reexport.js",
   "scripts": {
-    "bundle": "rm -rf .build && bun build --target bun bin/dprint-exec-reexport.js --outfile .build/bin/dprint-exec-reexport.js",
+    "build": "tsdown",
     "prepublish": "bun run bundle"
   },
-  "dependencies": {
+  "devDependencies": {
+    "tsdown": "^0.15.7",
     "get-monorepo-root": "^1.2.1",
     "get-stdin": "^9.0.0",
-    "glob-imports": "^3.0.3"
+    "glob": "^11.0.3",
+    "pathe": "^2.0.3"
   }
 }

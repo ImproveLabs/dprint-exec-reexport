@@ -1,8 +1,7 @@
-#!/usr/bin/env bun
-
+#!/usr/bin/env node
 import { getMonorepoDirpath } from 'get-monorepo-root';
 import getStdin from 'get-stdin';
-import { createGlobfileManager } from 'glob-imports';
+import { createGlobfileManager } from '../utils/glob.js';
 
 const stdin = await getStdin();
 if (!stdin.includes('// dprint-reexport')) {
