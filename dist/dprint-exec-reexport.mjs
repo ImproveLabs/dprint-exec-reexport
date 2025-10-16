@@ -6536,19 +6536,17 @@ function createGlobfileManager({ monorepoDirpath }) {
 				else virtualFileContentLines.push("module.exports = {", ...matchedFiles.map((matchedFile) => `...require(${JSON.stringify(filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath)}),`), "};");
 				break;
 			case "files":
-				/** @param {string} filepath */
-				for (const matchedFile of matchedFiles) {
-					const filepath$1 = filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath;
-					if (moduleType$1 === "module") virtualFileContentLines.push(`export * as ${JSON.stringify(filepath$1)} from ${JSON.stringify(filepath$1)};`);
-					else {
-						const filepath$2 = filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath;
-						virtualFileContentLines.push("module.exports = {");
-						for (const matchedFile$1 of matchedFiles) {
-							const relativeFilePath = posix$1.relative(monorepoDirpath, matchedFile$1.absoluteFilepath);
-							virtualFileContentLines.push(`${JSON.stringify(relativeFilePath)}: require(${JSON.stringify(filepath$2)}),`);
-						}
-						virtualFileContentLines.push("}");
+				if (moduleType$1 === "module") for (const matchedFile of matchedFiles) {
+					const relativeFilepath = posix$1.relative(monorepoDirpath, matchedFile.absoluteFilepath);
+					virtualFileContentLines.push(`export * as ${JSON.stringify(relativeFilepath)} from ${JSON.stringify(filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath)};`);
+				}
+				else {
+					virtualFileContentLines.push("module.exports = {");
+					for (const matchedFile of matchedFiles) {
+						const relativeFilePath = posix$1.relative(monorepoDirpath, matchedFile.absoluteFilepath);
+						virtualFileContentLines.push(`${JSON.stringify(relativeFilePath)}: require(${JSON.stringify(filepathType === "relative" ? matchedFile.relativeFilepath : matchedFile.absoluteFilepath)}),`);
 					}
+					virtualFileContentLines.push("}");
 				}
 				break;
 			case "filepaths":

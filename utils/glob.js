@@ -131,40 +131,41 @@ export function createGlobfileManager({ monorepoDirpath }) {
       }
 
       case "files": {
-        /** @param {string} filepath */
         if (moduleType === "module") {
           for (const matchedFile of matchedFiles) {
-            const filepath =
-              filepathType === "relative"
-                ? matchedFile.relativeFilepath
-                : matchedFile.absoluteFilepath;
+            const relativeFilepath = path.relative(
+              monorepoDirpath,
+              matchedFile.absoluteFilepath
+            );
 
             virtualFileContentLines.push(
-              `export * as ${JSON.stringify(filepath)} from ${JSON.stringify(
-                filepath
+              `export * as ${JSON.stringify(
+                relativeFilepath
+              )} from ${JSON.stringify(
+                filepathType === "relative"
+                  ? matchedFile.relativeFilepath
+                  : matchedFile.absoluteFilepath
               )};`
             );
           }
         } else {
           virtualFileContentLines.push("module.exports = {");
           for (const matchedFile of matchedFiles) {
-            const filepath =
-              filepathType === "relative"
-                ? matchedFile.relativeFilepath
-                : matchedFile.absoluteFilepath;
             const relativeFilePath = path.relative(
               monorepoDirpath,
               matchedFile.absoluteFilepath
             );
+
             virtualFileContentLines.push(
-              `${JSON.stringify(filepath)}: require(${JSON.stringify(
-                filepath
+              `${JSON.stringify(relativeFilePath)}: require(${JSON.stringify(
+                filepathType === "relative"
+                  ? matchedFile.relativeFilepath
+                  : matchedFile.absoluteFilepath
               )}),`
             );
           }
           virtualFileContentLines.push("}");
         }
-
         break;
       }
 
