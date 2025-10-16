@@ -244,7 +244,7 @@ const globPattern = pluginArgs[2];
 const globfileType = pluginArgs.find((arg) => arg.startsWith("--type="))?.replace("--type=", "") ?? "matches";
 const moduleType = pluginArgs.find((arg) => arg.startsWith("--module="))?.replace("--module=", "") ?? "module";
 const monorepoDirpath = getMonorepoDirpath(filepath);
-let newFileLines = "";
+let newFileLines = [];
 if (moduleType === "module") {
 	newFileLines.push(...fileLines.slice(0, dprintReexportLineIndex), dprintReexportLine);
 	const matchedFiles = fs$1.globSync(path.resolve(monorepoDirpath, globPattern));

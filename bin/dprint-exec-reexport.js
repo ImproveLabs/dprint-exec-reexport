@@ -37,13 +37,13 @@ const moduleType =
     ?.replace("--module=", "") ?? "module";
 
 const monorepoDirpath = getMonorepoDirpath(filepath);
-let newFileLines = "";
+let newFileLines = [];
 if (moduleType === "module") {
   newFileLines.push(
     ...fileLines.slice(0, dprintReexportLineIndex),
     dprintReexportLine
   );
-  const matchedFiles = fs.globSync(path.resolve(monorepoDirpath, globPattern));
+  const matchedFiles = fs.globSync(path.resolve(filepath, globPattern));
   if (globfileType === "filepaths") {
     newFileLines.push("export default {");
   }
